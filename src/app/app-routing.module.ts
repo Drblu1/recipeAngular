@@ -5,12 +5,15 @@ import {NgModule} from "@angular/core";
 import {ErrorPageComponent} from "./error-page/error-page.component";
 import {RecipeDetailsComponent} from "./recipes/recipe-details/recipe-details.component";
 import {RecipeStart} from "./recipes/no-recipe-selected/recipe-start.component";
+import {RecipeEditComponent} from "./recipes/recipe-edit/recipe-edit.component";
 
 const appRoutes: Routes = [
   {path: '', redirectTo: '/recipes' , pathMatch: "full"},
   {path: 'recipes', component: RecipesComponent, children: [
       {path: '', component: RecipeStart},
-      {path: ':id', component: RecipeDetailsComponent}
+      {path: 'new', component: RecipeEditComponent},
+      {path: ':id', component: RecipeDetailsComponent},
+      {path: ':id/edit', component: RecipeEditComponent}
     ]},
   {path: 'shopping-list', component: ShoppingListComponent},
   {path: '**', component: ErrorPageComponent}
