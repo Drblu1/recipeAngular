@@ -1,5 +1,6 @@
 import {Component} from '@angular/core';
 import {HeaderState} from './header/headerState.enum';
+import {Router, RouterModule} from "@angular/router";
 
 @Component({
   selector: 'app-root',
@@ -7,9 +8,5 @@ import {HeaderState} from './header/headerState.enum';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  private headerTab: HeaderState = HeaderState.RECIPES;
 
-  onNavigate(headerTab: HeaderState) {
-    this.headerTab = headerTab;
-  }
 }
