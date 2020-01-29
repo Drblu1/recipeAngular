@@ -15,6 +15,7 @@ import {ShoppingListService} from "./shopping-list/shopping-list.service";
 import {RouterModule} from "@angular/router";
 import {AppRoutingModule} from "./app-routing.module";
 import { ErrorPageComponent } from './error-page/error-page.component';
+import { RecipeStart } from './recipes/no-recipe-selected/recipe-start.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { ErrorPageComponent } from './error-page/error-page.component';
     HeaderComponent,
     RecipesComponent,
     DropdownDirective,
-    ErrorPageComponent
+    ErrorPageComponent,
+    RecipeStart
   ],
   imports: [
     BrowserModule,
