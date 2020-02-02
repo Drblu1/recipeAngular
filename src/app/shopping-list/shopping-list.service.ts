@@ -3,7 +3,7 @@ import {Subject} from "rxjs";
 
 export class ShoppingListService {
 
-  ingredientAdded: Subject<Ingredient[]> = new Subject<Ingredient[]>();
+  ingredientChanged: Subject<Ingredient[]> = new Subject<Ingredient[]>();
   ingredientEdited: Subject<Ingredient> = new Subject<Ingredient>();
 
   private ingredients: Ingredient[] = [
@@ -20,23 +20,40 @@ export class ShoppingListService {
     const ingredientIndex = this.ingredients.findIndex(ingredient => {
       return ingredient.name === previousIngredient.name && ingredient.amount === previousIngredient.amount;
     });
-    //Bug to correct here if 2 ingredients are the same the first one in the array will be edited
     this.ingredients[ingredientIndex] = newIngredient;
-    this.ingredientAdded.next(this.ingredients.slice());
+    this.ingredientChanged.next(this.ingredients.slice());
   }
 
-  addIngredient(ingredient: Ingredient) {
-    this.ingredients.push(ingredient);
-    this.ingredientAdded.next(this.ingredients.slice());
+  addIngredient(ingredientToAdd: Ingredient) {
+    const ingredientIndex = this.ingredients.findIndex(ingredient => {
+      return ingredient.name === ingredientToAdd.name;
+    });
+    if (ingredientIndex === -1) {
+      this.ingredients.push(ingredientToAdd);
+      this.ingredientChanged.next(this.ingredients.slice());
+    } else {
+      console.log("Ingredient already in")
+      //Inform the user
+    }
   }
 
   addIngredients(ingredients: Ingredient[]): void {
     this.ingredients.push(...ingredients);
-    this.ingredientAdded.next(this.ingredients.slice())
+    this.ingredientChanged.next(this.ingredients.slice())
   }
 
 
   onIngredientSelected(index: number) {
     this.ingredientEdited.next(this.ingredients[index]);
+  }
+
+  deleteIngredient(ingredientToDelete: Ingredient) {
+    const ingredientIndex = this.ingredients.findIndex(ingredient => {
+      return ingredient.name === ingredientToDelete.name && ingredient.amount === ingredientToDelete.amount;
+    });
+    if ( ingredientIndex !== -1) {
+      this.ingredients.splice(ingredientIndex, 1);
+      this.ingredientChanged.next(this.ingredients.slice());
+    }
   }
 }
