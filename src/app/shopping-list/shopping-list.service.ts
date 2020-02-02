@@ -4,6 +4,7 @@ import {Subject} from "rxjs";
 export class ShoppingListService {
 
   ingredientAdded: Subject<Ingredient[]> = new Subject<Ingredient[]>();
+  ingredientEdited: Subject<Ingredient> = new Subject<Ingredient>();
 
   private ingredients: Ingredient[] = [
     new Ingredient('Apple', 5),
@@ -14,7 +15,17 @@ export class ShoppingListService {
     return this.ingredients.slice();
   }
 
-  addIngredient(ingredient: Ingredient): void {
+
+  updateIngredient(previousIngredient: Ingredient, newIngredient: Ingredient) {
+    const ingredientIndex = this.ingredients.findIndex(ingredient => {
+      return ingredient.name === previousIngredient.name && ingredient.amount === previousIngredient.amount;
+    });
+    //Bug to correct here if 2 ingredients are the same the first one in the array will be edited
+    this.ingredients[ingredientIndex] = newIngredient;
+    this.ingredientAdded.next(this.ingredients.slice());
+  }
+
+  addIngredient(ingredient: Ingredient) {
     this.ingredients.push(ingredient);
     this.ingredientAdded.next(this.ingredients.slice());
   }
@@ -22,5 +33,10 @@ export class ShoppingListService {
   addIngredients(ingredients: Ingredient[]): void {
     this.ingredients.push(...ingredients);
     this.ingredientAdded.next(this.ingredients.slice())
+  }
+
+
+  onIngredientSelected(index: number) {
+    this.ingredientEdited.next(this.ingredients[index]);
   }
 }
