@@ -18,6 +18,7 @@ import { ErrorPageComponent } from './error-page/error-page.component';
 import { RecipeStart } from './recipes/no-recipe-selected/recipe-start.component';
 import { RecipeEditComponent } from './recipes/recipe-edit/recipe-edit.component';
 import {RecipeService} from "./recipes/recipe.service";
+import {HttpClientModule} from "@angular/common/http";
 
 @NgModule({
   declarations: [
@@ -39,7 +40,8 @@ import {RecipeService} from "./recipes/recipe.service";
     FormsModule,
     RouterModule,
     AppRoutingModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    HttpClientModule
   ],
   providers: [RecipeService, ShoppingListService],
   bootstrap: [AppComponent]
