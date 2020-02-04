@@ -2,7 +2,8 @@ import {Injectable} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
 import {RecipeService} from "../recipes/recipe.service";
 import {Recipe} from "../recipes/recipe.model";
-import {map} from "rxjs/operators";
+import {map, tap} from "rxjs/operators";
+import {Observable} from "rxjs";
 
 @Injectable({providedIn: 'root'})
 export class DataStorageService {
@@ -12,17 +13,19 @@ export class DataStorageService {
 
   storeRecipes() {
     const recipes = this.recipeService.getRecipes();
-    this.http.put('https://recipeapp-cb041.firebaseio.com/recipes.json', recipes).subscribe(response => console.log(response) );
+    this.http.put('https://recipeapp-cb041.firebaseio.com/recipes.json', recipes).subscribe(response => console.log(response));
   }
 
-  fetchRecipes() {
-    this.http.get<Recipe[]>('https://recipeapp-cb041.firebaseio.com/recipes.json').pipe(map(recipes => {
-      return recipes.map(recipe => {
-        return {...recipe, ingredients: recipe.ingredients? recipe.ingredients : []};
-      })
-    })).subscribe( recipes => {
-      this.recipeService.setRecipes(recipes);
-    });
+  fetchRecipes(): Observable<Recipe[]> {
+    return this.http.get<Recipe[]>('https://recipeapp-cb041.firebaseio.com/recipes.json')
+      .pipe(map(recipes => {
+          return recipes.map(recipe => {
+            return {...recipe, ingredients: recipe.ingredients ? recipe.ingredients : []};
+          })
+        }), tap(recipes => {
+          this.recipeService.setRecipes(recipes);
+        })
+      )
   }
 
 }
