@@ -12,6 +12,8 @@ import {Subscription} from "rxjs";
 })
 export class AuthComponent implements OnDestroy {
   private isLoginMode = true;
+  private isLoading = false;
+  private error: string = null;
   private subscription: Subscription;
 
   constructor(private authService: AuthService) {
@@ -24,6 +26,7 @@ export class AuthComponent implements OnDestroy {
   onSubmit(authForm: NgForm) {
     const email = authForm.value.email;
     const password = authForm.value.password;
+    this.isLoading = true;
     if (this.isLoginMode) {
 
     } else {
@@ -31,9 +34,12 @@ export class AuthComponent implements OnDestroy {
         .subscribe(
           response => {
             console.log(response);
+            this.isLoading = false;
           },
-          error => {
-            console.log(error);
+          errorMessage => {
+            console.log(errorMessage);
+            this.error = errorMessage;
+            this.isLoading = false;
           });
     }
     authForm.reset();
