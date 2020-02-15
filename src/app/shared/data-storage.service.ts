@@ -4,11 +4,12 @@ import {RecipeService} from "../recipes/recipe.service";
 import {Recipe} from "../recipes/recipe.model";
 import {map, tap} from "rxjs/operators";
 import {Observable} from "rxjs";
+import {AuthService} from "../auth/auth.service";
 
 @Injectable({providedIn: 'root'})
 export class DataStorageService {
 
-  constructor(private http: HttpClient, private recipeService: RecipeService) {
+  constructor(private http: HttpClient, private recipeService: RecipeService, private authService: AuthService) {
   }
 
   storeRecipes() {
@@ -17,15 +18,16 @@ export class DataStorageService {
   }
 
   fetchRecipes(): Observable<Recipe[]> {
+
     return this.http.get<Recipe[]>('https://recipeapp-cb041.firebaseio.com/recipes.json')
-      .pipe(map(recipes => {
+      .pipe(
+        map(recipes => {
           return recipes.map(recipe => {
             return {...recipe, ingredients: recipe.ingredients ? recipe.ingredients : []};
           })
         }), tap(recipes => {
           this.recipeService.setRecipes(recipes);
-        })
-      )
+        }));
   }
 
 }
