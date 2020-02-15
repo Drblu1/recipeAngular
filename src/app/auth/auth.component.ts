@@ -1,7 +1,8 @@
 import {Component, OnDestroy} from "@angular/core";
 import {NgForm} from "@angular/forms";
-import {AuthService} from "./auth.service";
-import {Subscription} from "rxjs";
+import {AuthResponseData, AuthService} from "./auth.service";
+import {Observable, Subscription} from "rxjs";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-auth',
@@ -14,9 +15,9 @@ export class AuthComponent implements OnDestroy {
   private isLoginMode = true;
   private isLoading = false;
   private error: string = null;
-  private subscription: Subscription;
+  private subscriptions: Subscription[] = [];
 
-  constructor(private authService: AuthService) {
+  constructor(private authService: AuthService, private router: Router) {
   }
 
   onSwitchMode() {
@@ -26,25 +27,33 @@ export class AuthComponent implements OnDestroy {
   onSubmit(authForm: NgForm) {
     const email = authForm.value.email;
     const password = authForm.value.password;
+    let authObs: Observable<AuthResponseData>
+
     this.isLoading = true;
     if (this.isLoginMode) {
-
+      authObs = this.authService.login(email, password);
     } else {
-      this.subscription = this.authService.signUp(email, password)
-        .subscribe(
-          response => {
-            console.log(response);
-            this.isLoading = false;
-          },
-          errorMessage => {
-            console.log(errorMessage);
-            this.error = errorMessage;
-            this.isLoading = false;
-          });
+      authObs = this.authService.signUp(email, password);
     }
+    this.subscriptions.push(this.createAuthenticationSubscription(authObs));
     authForm.reset();
   }
 
+  private createAuthenticationSubscription(authObs: Observable<AuthResponseData>) {
+    return authObs.subscribe(
+      response => {
+        console.log(response);
+        this.isLoading = false;
+        this.router.navigate(['/recipes']);
+      },
+      errorMessage => {
+        console.log(errorMessage);
+        this.error = errorMessage;
+        this.isLoading = false;
+      });
+  }
+
   ngOnDestroy(): void {
+    this.subscriptions.forEach(subscription => subscription.unsubscribe());
   }
 }
