@@ -7,6 +7,7 @@ import {RecipeDetailsComponent} from "./recipes/recipe-details/recipe-details.co
 import {RecipeStart} from "./recipes/no-recipe-selected/recipe-start.component";
 import {RecipeEditComponent} from "./recipes/recipe-edit/recipe-edit.component";
 import {RecipesResolverService} from "./recipes/recipesResolver.service";
+import {AuthComponent} from "./auth/auth.component";
 
 const appRoutes: Routes = [
   {path: '', redirectTo: '/recipes' , pathMatch: "full"},
@@ -17,6 +18,7 @@ const appRoutes: Routes = [
       {path: ':id/edit', component: RecipeEditComponent, resolve: [RecipesResolverService]}
     ]},
   {path: 'shopping-list', component: ShoppingListComponent},
+  {path: 'auth', component: AuthComponent},
   {path: '**', component: ErrorPageComponent}
 ];
 
