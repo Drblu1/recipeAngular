@@ -2,8 +2,6 @@ import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 
 import {AppComponent} from './app.component';
-import {ShoppingListComponent} from './shopping-list/shopping-list.component';
-import {ShoppingListEditComponent} from './shopping-list/shopping-list-edit/shopping-list-edit.component';
 import {HeaderComponent} from './header/header.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {DropdownDirective} from './shared/dropdown.directive';
@@ -19,12 +17,11 @@ import {AuthInterceptorService} from "./auth/auth-interceptor.service";
 import {AlertComponent} from './shared/alert/alert.component';
 import {PlaceholderDirective} from './shared/placeholder/placeholder.directive';
 import {RecipesModules} from "./recipes/recipes.modules";
+import {ShoppingListModule} from "./shopping-list/shopping-list.module";
 
 @NgModule({
   declarations: [
     AppComponent,
-    ShoppingListComponent,
-    ShoppingListEditComponent,
     HeaderComponent,
     DropdownDirective,
     ErrorPageComponent,
@@ -40,6 +37,7 @@ import {RecipesModules} from "./recipes/recipes.modules";
     ReactiveFormsModule,
     HttpClientModule,
     RecipesModules,
+    ShoppingListModule,
     AppRoutingModule
   ],
   providers: [
