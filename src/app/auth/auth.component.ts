@@ -1,8 +1,10 @@
-import {Component, OnDestroy} from "@angular/core";
+import {Component, ComponentFactoryResolver, OnDestroy, ViewChild} from "@angular/core";
 import {NgForm} from "@angular/forms";
 import {AuthResponseData, AuthService} from "./auth.service";
 import {Observable, Subscription} from "rxjs";
 import {Router} from "@angular/router";
+import {AlertComponent} from "../shared/alert/alert.component";
+import {PlaceholderDirective} from "../shared/placeholder/placeholder.directive";
 
 @Component({
   selector: 'app-auth',
@@ -16,8 +18,9 @@ export class AuthComponent implements OnDestroy {
   private isLoading = false;
   private error: string = null;
   private subscriptions: Subscription[] = [];
+  @ViewChild(PlaceholderDirective, {static: false}) alertHost: PlaceholderDirective;
 
-  constructor(private authService: AuthService, private router: Router) {
+  constructor(private authService: AuthService, private router: Router, private componentFactoryResolver: ComponentFactoryResolver) {
   }
 
   onSwitchMode() {
@@ -49,11 +52,34 @@ export class AuthComponent implements OnDestroy {
       errorMessage => {
         console.log(errorMessage);
         this.error = errorMessage;
+        this.showErrorAlert(errorMessage);
         this.isLoading = false;
       });
   }
 
+  onHandleError() {
+    this.error = null;
+  }
+
+
+  private closeSubscription: Subscription;
+
+  private showErrorAlert(errorMessage: string) {
+    const alertComponentComponentFactory = this.componentFactoryResolver.resolveComponentFactory(AlertComponent);
+    const hostViewContainerRef = this.alertHost.viewContainerRef;
+    hostViewContainerRef.clear();
+    const alertComponentComponentRef = hostViewContainerRef.createComponent(alertComponentComponentFactory);
+    alertComponentComponentRef.instance.message = errorMessage;
+    this.closeSubscription = alertComponentComponentRef.instance.close.subscribe(() => {
+      this.closeSubscription.unsubscribe();
+      hostViewContainerRef.clear();
+    });
+  }
+
   ngOnDestroy(): void {
     this.subscriptions.forEach(subscription => subscription.unsubscribe());
+    if (this.closeSubscription) {
+      this.closeSubscription.unsubscribe();
+    }
   }
 }
