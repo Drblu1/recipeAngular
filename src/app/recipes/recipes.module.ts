@@ -26,6 +26,6 @@ import {SharedModule} from "../shared/shared.module";
     RecipesRoutingModule
   ]
 })
-export class RecipesModules {
+export class RecipesModule {
 
 }
