@@ -37,10 +37,10 @@ import {RecipesModules} from "./recipes/recipes.modules";
     BrowserModule,
     FormsModule,
     RouterModule,
-    AppRoutingModule,
     ReactiveFormsModule,
     HttpClientModule,
-    RecipesModules
+    RecipesModules,
+    AppRoutingModule
   ],
   providers: [
     RecipeService,
