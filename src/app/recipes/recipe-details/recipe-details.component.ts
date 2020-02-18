@@ -10,7 +10,7 @@ import {ActivatedRoute, Params, Router} from "@angular/router";
 })
 export class RecipeDetailsComponent implements OnInit {
 
-  private recipe: Recipe;
+  recipe: Recipe;
 
   private index: number;
 

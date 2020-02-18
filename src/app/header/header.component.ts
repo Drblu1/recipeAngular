@@ -8,8 +8,8 @@ import {Subscription} from "rxjs";
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css']
 })
-export class HeaderComponent implements OnInit, OnDestroy{
-  private isAuthenticated = false;
+export class HeaderComponent implements OnInit, OnDestroy {
+  isAuthenticated = false;
   private subscription: Subscription;
 
   constructor(private dataStorageService: DataStorageService, private authService: AuthService) {

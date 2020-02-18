@@ -12,7 +12,7 @@ export class RecipeEditComponent implements OnInit {
 
   private id: number;
   private editMode = false;
-  private recipeForm: FormGroup;
+  recipeForm: FormGroup;
 
   constructor(private route: ActivatedRoute, private router: Router, private recipeService: RecipeService) {
   }
